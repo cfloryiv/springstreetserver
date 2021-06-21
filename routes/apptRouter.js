@@ -12,6 +12,9 @@ function routes({Appt, Address}) {
   .post(addressescontroller.post)
   .get(addressescontroller.get);
 
+  apptRouter.route('/addresses/:Id')
+  .put(addressescontroller.put);
+
   apptRouter.route('/appts')
     .post(controller.post)
     .get(controller.get);
