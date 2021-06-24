@@ -7,6 +7,8 @@ const apptModel=new Schema(
         date: { type: String},
         time: { type: String},
         name: { type: String},
+        empid: { type: String},
+        userid: {type: String},
     }
 );
 
