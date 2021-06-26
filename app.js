@@ -22,7 +22,9 @@ const inventoryRouter = require('./routes/inventoryRouter')(Inventory);
 const Appt = require('./models/apptModel');
 
 const Address = require('./models/addressModel');
-const apptRouter = require('./routes/apptRouter')({Appt, Address});
+const Procedure=require('./models/procedureModel');
+const Insurance=require('./models/insuranceModel');
+const apptRouter = require('./routes/apptRouter')({Appt, Address, Procedure, Insurance});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

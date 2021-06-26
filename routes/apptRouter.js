@@ -2,11 +2,15 @@
 const express = require('express');
 const apptsController = require('../controllers/apptsController');
 const addressesController = require('../controllers/addressesController');
+const proceduresController = require('../controllers/proceduresController');
+const insurancesController = require('../controllers/insurancesController');
 
-function routes({Appt, Address}) {
+function routes({Appt, Address, Procedure, Insurance}) {
   const apptRouter = express.Router();
   const controller = apptsController(Appt);
   const addressescontroller = addressesController(Address);
+  const procedurescontroller=proceduresController(Procedure);
+  const insurancescontroller=insurancesController(Insurance);
 
   apptRouter.route('/addresses')
   .post(addressescontroller.post)
@@ -14,6 +18,17 @@ function routes({Appt, Address}) {
 
   apptRouter.route('/addresses/:Id')
   .put(addressescontroller.put);
+
+  apptRouter.route('/procedures')
+  .post(procedurescontroller.post)
+  .get(procedurescontroller.get);
+
+  apptRouter.route('/insurances')
+  .post(insurancescontroller.post)
+  .get(insurancescontroller.get);
+
+  apptRouter.route('/insurances')
+  .put(insurancescontroller.put);
 
   apptRouter.route('/appts')
     .post(controller.post)
