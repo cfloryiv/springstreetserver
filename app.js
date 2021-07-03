@@ -24,7 +24,8 @@ const Appt = require('./models/apptModel');
 const Address = require('./models/addressModel');
 const Procedure=require('./models/procedureModel');
 const Insurance=require('./models/insuranceModel');
-const apptRouter = require('./routes/apptRouter')({Appt, Address, Procedure, Insurance});
+const Bill=require('./models/billModel');
+const apptRouter = require('./routes/apptRouter')({Appt, Address, Procedure, Insurance, Bill});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
