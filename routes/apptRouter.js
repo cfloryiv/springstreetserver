@@ -12,7 +12,7 @@ function routes({Appt, Address, Procedure, Insurance, Bill}) {
   const addressescontroller = addressesController(Address);
   const procedurescontroller=proceduresController(Procedure);
   const insurancescontroller=insurancesController(Insurance);
-  const billscontroller=billsController(Bill);
+  const billscontroller=billsController(Bill, Address, Procedure);
 
   apptRouter.route('/addresses')
   .post(addressescontroller.post)
