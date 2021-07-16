@@ -16,68 +16,41 @@ function billsController(Bill, Address, Procedure) {
     res.status(201);
     return;
   }
-  async function getBills(Bill, query) {
-    // const query = { userid: "cfloryiv" };
-    return await Bill.find(query).sort("date").exec();
-  }
-  async function getProcedure(Procedure, code) {
-    return await Procedure.findOne({ code: code })
-      .exec()
-      .then((proc) => {
-        return proc._doc;
-      });
-  }
-  async function getAddress(Address, empid) {
-    return Address.findOne({ userid: empid })
-      .exec()
-      .then((addr) => {
-        return addr._doc;
-      });
-  }
 
   async function buildBills(query) {
-    return new Promise((resolve) => {
+    const doc = await Bill.find(query).sort('date').exec();
+    const promises = [];
+    await doc.forEach((bill) => {
       (async () => {
-        const doc = await getBills(Bill, query);
-        const newBills = [];
-        await doc.forEach((temp) => {
-          const bill = temp._doc;
-          (async () => {
-            // lookup the doctors name
-            const { empid } = bill;
-            const doctor = await getAddress(Address, empid);
-            // lookup the procedure name
-            const { code } = bill;
-            const procedure = await getProcedure(Procedure, code);
-            const { name } = doctor;
-            const { desc } = procedure;
-            const newBill = { name, desc, ...bill };
-            await newBills.push(newBill);
-            if (newBills.length===doc.length) {
-              resolve(newBills)
+        await promises.push(
+          new Promise((resolve) => {
+            (async () => {
 
-            }
-          
-          })();
-        });
+              const { empid, code } = bill;
+
+              const doctor = Address.findOne({ userid: empid });
+              const procedure = Procedure.findOne({ code });
+
+              const { name } = await doctor;
+              const { desc } = await procedure;
+
+              const newBill = { name, desc, ...bill };
+              resolve(newBill);
+            })();
+          })
+        );
       })();
-    })
+    });
+    return Promise.all(promises)
+      .then((res) => {
+        return res;
+      });
   }
   async function get(req, res) {
     const query = {};
     if (req.query.userid) {
       query.userid = req.query.userid;
     }
-    // Bill.find(query, (err, bills) => {
-    //   if (err) {
-    //     return res.send(err);
-    //   }
-    //   const returnBills = bills.map((bill) => {
-    //     const newBill = bill.toJSON();
-    //     return newBill;
-    //   });
-    //   return res.json(returnBills);
-    // }).sort('date');
     const result = await buildBills(query);
     return res.json(result);
   }
