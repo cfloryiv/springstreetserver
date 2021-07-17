@@ -8,7 +8,7 @@ const billsController = require('../controllers/billsController');
 
 function routes({Appt, Address, Procedure, Insurance, Bill}) {
   const apptRouter = express.Router();
-  const controller = apptsController(Appt);
+  const controller = apptsController(Appt, Address);
   const addressescontroller = addressesController(Address);
   const procedurescontroller=proceduresController(Procedure);
   const insurancescontroller=insurancesController(Insurance);

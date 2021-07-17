@@ -20,12 +20,13 @@ function billsController(Bill, Address, Procedure) {
   async function buildBills(query) {
     const doc = await Bill.find(query).sort('date').exec();
     const promises = [];
-    await doc.forEach((bill) => {
+    await doc.forEach(({ _doc }) => {
       (async () => {
         await promises.push(
           new Promise((resolve) => {
             (async () => {
 
+              const bill=_doc;
               const { empid, code } = bill;
 
               const doctor = Address.findOne({ userid: empid });
